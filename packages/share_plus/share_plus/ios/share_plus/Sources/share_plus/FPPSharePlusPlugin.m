@@ -244,6 +244,28 @@ TopViewControllerForViewController(UIViewController *viewController) {
   return metadata;
 }
 
+- (NSString *) activityViewController:(UIActivityViewController *) activityViewController
+    dataTypeIdentifierForActivityType:(UIActivityType) activityType {
+  if (_mimeType == nil) {
+    return nil;
+  }
+  if ([_mimeType isEqualToString:@"application/pdf"]) {
+    return @"com.adobe.pdf";
+  }
+  if ([_mimeType isEqualToString:@"image/png"]) return @"public.png";
+  if ([_mimeType isEqualToString:@"image/jpeg"]) return @"public.jpeg";
+  if ([_mimeType isEqualToString:@"image/webp"]) return @"org.webmproject.webp";
+  if ([_mimeType isEqualToString:@"image/svg"]) return @"public.svg-image";
+  // It would be helpful to log here, instructing the user that their type is not
+  // auto-detected, and to extend this. The framework libraries log many errors
+  // when this happens, all of which are perplexing.
+  //
+  // UTI strings for many types can be found here (not cross-referenced with mime types,
+  // unfortunately):
+  // https://developer.apple.com/documentation/uniformtypeidentifiers/uttype-swift.struct
+  return nil;
+}
+
 @end
 
 @implementation FPPSharePlusPlugin
