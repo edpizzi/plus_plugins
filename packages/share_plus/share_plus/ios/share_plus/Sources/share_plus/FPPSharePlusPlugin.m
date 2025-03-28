@@ -87,6 +87,7 @@ TopViewControllerForViewController(UIViewController *viewController) {
 @property(readonly, nonatomic, copy) NSString *text;
 @property(readonly, nonatomic, copy) NSString *path;
 @property(readonly, nonatomic, copy) NSString *mimeType;
+@property(readonly, nonatomic, copy) NSData *data;
 
 - (instancetype)initWithSubject:(NSString *)subject
                            text:(NSString *)text NS_DESIGNATED_INITIALIZER;
@@ -124,6 +125,7 @@ TopViewControllerForViewController(UIViewController *viewController) {
   if (self) {
     _path = path;
     _mimeType = mimeType;
+    _data = [NSData dataWithContentsOfFile:path];
   }
   return self;
 }
@@ -136,6 +138,7 @@ TopViewControllerForViewController(UIViewController *viewController) {
     _path = path;
     _mimeType = mimeType;
     _subject = [subject isKindOfClass:NSNull.class] ? @"" : subject;
+    _data = [NSData dataWithContentsOfFile:path];
   }
   return self;
 }
@@ -149,6 +152,9 @@ TopViewControllerForViewController(UIViewController *viewController) {
 
 - (id)activityViewController:(UIActivityViewController *)activityViewController
          itemForActivityType:(UIActivityType)activityType {
+  if (_data) {
+    return _data;
+  }
   if (!_path || !_mimeType) {
     return _text;
   }
